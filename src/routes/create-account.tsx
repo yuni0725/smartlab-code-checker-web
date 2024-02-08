@@ -1,74 +1,24 @@
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { SubmitHandler, useForm } from "react-hook-form";
-import styled from "styled-components";
+import { auth } from "../firebase";
+import { Link, useNavigate } from "react-router-dom";
+import { FirebaseError } from "firebase/app";
+import isValueTypeOfEmail, {
+  Form,
+  Error,
+  ErrorBottom,
+  Input,
+  Switcher,
+  Title,
+  Wrapper,
+} from "../components/auth-component";
 
 type FormFields = {
   name: string;
   email: string;
   password: string;
+  passwordForCheck: string;
 };
-
-const Wrapper = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 420px;
-  padding: 50px 0px;
-`;
-
-const Title = styled.h1`
-  font-size: 42px;
-  text-align: center;
-  margin-bottom: 5px;
-  color: var(--font-color);
-  font-weight: 500;
-`;
-
-const Form = styled.form`
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-`;
-
-const Input = styled.input`
-  padding: 10px 20px;
-  border-radius: 50px;
-  border: none;
-
-  width: 100%;
-  font-size: 16px;
-
-  background-color: whitesmoke;
-  color: var(--font-color);
-
-  &:focus {
-    outline: 2px solid black;
-  }
-
-  &[type="submit"] {
-    cursor: pointer;
-    outline: none;
-    background-color: var(--highlight-color);
-    &:hover {
-      opacity: 0.8;
-    }
-  }
-`;
-
-const Error = styled.span`
-  margin-left: 15px;
-  font-size: 16px;
-  color: tomato;
-`;
-
-function isValueTypeOfEmail(textShouldBeCheck: string): boolean {
-  if (textShouldBeCheck.includes("@")) {
-    return true;
-  }
-  return false;
-}
 
 export default function CreateAccount() {
   const {
@@ -78,11 +28,21 @@ export default function CreateAccount() {
     formState: { errors, isSubmitting },
   } = useForm<FormFields>();
 
+  const navigate = useNavigate();
+
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      console.log(data);
+      const credentials = await createUserWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
+      await updateProfile(credentials.user, { displayName: data.name });
+      navigate("/");
     } catch (error) {
-      setError("root", { message: "Server Error" });
+      if (error instanceof FirebaseError) {
+        setError("root", { message: error.message });
+      }
     }
   };
 
@@ -116,14 +76,18 @@ export default function CreateAccount() {
           {...register("password", { required: "Password is required!" })}
           placeholder="Password"
           autoComplete="off"
+          type="password"
         />
         {errors.password && <Error>{errors.password.message}</Error>}
         <Input
           type="submit"
           value={isSubmitting ? "Loading..." : "Create Account"}
         />
-        {errors.root && <Error>{errors.root.message}</Error>}
+        {errors.root && <ErrorBottom>{errors.root.message}</ErrorBottom>}
       </Form>
+      <Switcher>
+        Already have an account? <Link to="/login">Log in &rarr;</Link>
+      </Switcher>
     </Wrapper>
   );
 }

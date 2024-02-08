@@ -8,11 +8,16 @@ import reset from "styled-reset";
 import { useEffect, useState } from "react";
 import LoadingScreen from "./components/loading-screen";
 import { auth } from "./firebase";
+import ProtectedRoute from "./components/protected-route";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
+    element: (
+      <ProtectedRoute>
+        <Layout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: "",
@@ -35,7 +40,7 @@ const GlobalStyles = createGlobalStyle`
   * {
     box-sizing : border-box;
     --highlight-color : #70b4e2;
-    --background-color : #eee4ddb9;
+    --background-color : #f3edde;
     --font-color : #313638;
   }
   body {
