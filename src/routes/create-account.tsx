@@ -12,6 +12,8 @@ import isValueTypeOfEmail, {
   Title,
   Wrapper,
 } from "../components/auth-component";
+import GithubButton from "../components/auth-github-btn";
+import GoogleButton from "../components/auth-google-btn";
 
 type FormFields = {
   name: string;
@@ -49,7 +51,6 @@ export default function CreateAccount() {
   return (
     <Wrapper>
       <Title>Create Account</Title>
-      <Title>SmartLab</Title>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Input
           {...register("name", { required: "Name is required!" })}
@@ -88,6 +89,8 @@ export default function CreateAccount() {
       <Switcher>
         Already have an account? <Link to="/login">Log in &rarr;</Link>
       </Switcher>
+      <GithubButton></GithubButton>
+      <GoogleButton></GoogleButton>
     </Wrapper>
   );
 }
