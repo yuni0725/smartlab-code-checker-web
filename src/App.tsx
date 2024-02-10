@@ -10,6 +10,7 @@ import LoadingScreen from "./components/loading-screen";
 import { auth } from "./firebase";
 import ProtectedRoute from "./components/auth-protected-route";
 import Problem from "./routes/problem";
+import ProblemMenu from "./routes/problem-menu";
 
 const router = createBrowserRouter([
   {
@@ -25,7 +26,11 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "problem",
+        path: "problem-menu",
+        element: <ProblemMenu />,
+      },
+      {
+        path: "problem/:problemID",
         element: <Problem />,
       },
     ],
@@ -45,8 +50,9 @@ const GlobalStyles = createGlobalStyle`
   * {
     box-sizing : border-box;
     --highlight-color : #70b4e2;
-    --background-color : #f3edde;
+    --background-color : whitesmoke;
     --font-color : #313638;
+    --left-right-margin : 30px;
   }
   body {
     background-color : var(--background-color);

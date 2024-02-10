@@ -8,14 +8,17 @@ const Wrapper = styled.div`
   height: 50px;
 
   display: grid;
-  grid-template-columns: 0.5fr 4fr 1fr 0.5fr;
+  grid-template-columns: 0.5fr 4fr 0.5fr;
 
-  border: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
 `;
 
 const Head = styled.div`
   height: inherit;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-left: var(--left-right-margin);
 `;
 
 const Logo = styled.img`
@@ -55,26 +58,21 @@ const IconTitle = styled.span`
   color: var(--font-color);
 `;
 
-const LogOutDiv = styled.div`
+const Footer = styled.div`
   height: inherit;
   display: flex;
   align-items: center;
-  justify-content: center;
-`;
+  justify-content: flex-end;
+  gap: 10px;
 
-const UserDiv = styled.div`
-  height: inherit;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
+  margin-right: var(--left-right-margin);
 `;
 
 export default function NavigationBar() {
   return (
     <Wrapper>
       <Head>
-        <Logo src="src\assets\image\smartlab-logo.svg"></Logo>
+        <Logo src="/smartlab-logo.svg"></Logo>
       </Head>
       <Menu>
         <Link to="/" style={{ textDecoration: "none" }}>
@@ -83,21 +81,17 @@ export default function NavigationBar() {
             <IconTitle>Home</IconTitle>
           </MenuItem>
         </Link>
-        <Link to="/problem" style={{ textDecoration: "none" }}>
+        <Link to="/problem-menu" style={{ textDecoration: "none" }}>
           <MenuItem>
             <HiBars3 size="20" color="#313638" />
             <IconTitle>Problem</IconTitle>
           </MenuItem>
         </Link>
-        <MenuItem></MenuItem>
-        <MenuItem></MenuItem>
       </Menu>
-      <LogOutDiv>
+      <Footer>
         <LogOut></LogOut>
-      </LogOutDiv>
-      <UserDiv>
-        <HiUserCircle size="30" />
-      </UserDiv>
+        <HiUserCircle size="30" style={{ cursor: "pointer" }} />
+      </Footer>
     </Wrapper>
   );
 }
