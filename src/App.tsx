@@ -30,7 +30,7 @@ const router = createBrowserRouter([
         element: <ProblemMenu />,
       },
       {
-        path: "problem/:problemID",
+        path: "problem/:fileID",
         element: <Problem />,
       },
     ],

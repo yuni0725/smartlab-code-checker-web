@@ -12,8 +12,6 @@ import isValueTypeOfEmail, {
   Form,
 } from "../components/auth-component";
 import { Switcher } from "./../components/auth-component";
-import GithubButton from "../components/auth-github-btn";
-import GoogleButton from "../components/auth-google-btn";
 
 type FormFields = {
   email: string;
@@ -74,8 +72,6 @@ export default function Login() {
         Don't have an account?{" "}
         <Link to="/create-account">Create one &rarr;</Link>
       </Switcher>
-      <GithubButton></GithubButton>
-      <GoogleButton></GoogleButton>
     </Wrapper>
   );
 }

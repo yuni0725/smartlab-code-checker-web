@@ -6,9 +6,8 @@ import ProblemMenuTableContent from "./problem-menu-table-content";
 
 export interface ProblemTableType {
   difficulty: string;
-  fileId: string;
+  fileID: string;
   lang: string;
-  problemNum: number;
   title: string;
 }
 
@@ -31,7 +30,7 @@ const Table = styled.table`
   border-collapse: separate;
   border-spacing: 0;
 
-  table-layout: fixed;
+  table-layout: auto;
 `;
 
 const Tr = styled.tr`
@@ -43,8 +42,8 @@ const Tr = styled.tr`
 const Th = styled.th`
   background-color: ghostwhite;
   color: var(--font-color);
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: bolder;
   text-align: left;
 
   padding: 6px 15px;
@@ -62,10 +61,9 @@ export default function ProblemTable() {
   const getProblem = async () => {
     const problemQuery = query(collection(db, "problem"));
     const snapshot = await getDocs(problemQuery);
-    const problems = snapshot.docs.map((doc, index) => {
-      const problemNum = index + 1;
-      const { difficulty, fileId, lang, title } = doc.data();
-      return { difficulty, fileId, lang, title, problemNum };
+    const problems = snapshot.docs.map((doc) => {
+      const { difficulty, fileID, lang, title } = doc.data();
+      return { difficulty, fileID, lang, title };
     });
     setProblemTable(problems);
   };
@@ -79,7 +77,6 @@ export default function ProblemTable() {
       <Table>
         <thead>
           <Tr>
-            <Th className="problemNum">문제</Th>
             <Th className="title">문제 제목</Th>
             <Th className="lang">언어</Th>
             <Th className="difficulty">난이도</Th>
@@ -88,7 +85,7 @@ export default function ProblemTable() {
         </thead>
         <tbody>
           {problemTable.map((problem) => (
-            <ProblemMenuTableContent key={problem.fileId} {...problem} />
+            <ProblemMenuTableContent key={problem.fileID} {...problem} />
           ))}
         </tbody>
       </Table>

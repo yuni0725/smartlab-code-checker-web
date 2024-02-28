@@ -1,6 +1,9 @@
 import { useState } from "react";
 import styled from "styled-components";
-import CodeEditor from "@uiw/react-textarea-code-editor";
+import { Editor } from "@monaco-editor/react";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
+import { useParams } from "react-router-dom";
 
 const Wrapper = styled.div`
   display: grid;
@@ -69,20 +72,39 @@ const EditorDiv = styled.div`
 `;
 
 export const CodeEditorForCoding = () => {
+  const { fileID } = useParams<string>();
   const [lang, setLang] = useState("python");
   const [codeText, setCodeText] = useState("");
+  const [loadingToSaveCode, setLoadingToSaveCode] = useState(false);
 
   const onLangChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLang(e.target.value.toLowerCase());
   };
 
   const onEditerChange = (e: any) => {
-    setCodeText(e.target.value);
+    setCodeText(e);
   };
 
-  const onCodeSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onCodeSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (confirm("Are you sure you want to submit?")) {
+    const user = auth.currentUser;
+    const fileAndLangName = fileID + "-" + lang;
+    if (!user || typeof fileID == "undefined") return;
+    if (confirm("Are you sure you want to save it?")) {
+      try {
+        setLoadingToSaveCode(true);
+        await setDoc(
+          doc(db, "codeUserSavedIt", `${user.displayName}`),
+          {
+            [fileAndLangName]: codeText,
+          },
+          { merge: true }
+        );
+      } catch (e) {
+        alert(e);
+      } finally {
+        setLoadingToSaveCode(false);
+      }
     }
     return;
   };
@@ -99,22 +121,19 @@ export const CodeEditorForCoding = () => {
         </CenterDiv>
         <CenterDiv>
           <SaveForm onSubmit={onCodeSubmit}>
-            <SaveBtn type="submit">Save</SaveBtn>
+            <SaveBtn type="submit">
+              {loadingToSaveCode ? "Wait for a moment..." : "Save"}
+            </SaveBtn>
           </SaveForm>
         </CenterDiv>
       </Menu>
       <EditorDiv>
-        <CodeEditor
-          value={codeText}
+        <Editor
+          theme="vs"
           language={lang}
           onChange={onEditerChange}
-          padding={10}
-          style={{
-            backgroundColor: "white",
-            fontSize: "18px",
-            height: "100%",
-          }}
-        />
+          options={{ minimap: { enabled: false } }}
+        ></Editor>
       </EditorDiv>
     </Wrapper>
   );

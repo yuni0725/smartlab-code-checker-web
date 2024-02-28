@@ -9,6 +9,9 @@ const Tr = styled.tr`
 `;
 
 const Td = styled.td`
+  font-size: 20px;
+  font-weight: 400;
+
   border-right: 1px solid var(--border-color);
   border-bottom: 1px solid var(--border-color);
 
@@ -22,30 +25,29 @@ const Td = styled.td`
 `;
 
 const GoToProblemPage = styled.div`
-  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 
   a {
     color: var(--highlight-color);
-    font-weight: 600;
   }
 `;
 
 export default function ProblemMenuTableContent({
-  fileId,
+  fileID,
   lang,
   difficulty,
-  problemNum,
   title,
 }: ProblemTableType) {
   return (
     <Tr>
-      <Td>{problemNum}</Td>
       <Td>{title}</Td>
       <Td>{lang}</Td>
       <Td>{difficulty}</Td>
       <Td>
         <GoToProblemPage>
-          <Link to={`../problem/${fileId}`} style={{ textDecoration: "none" }}>
+          <Link to={`/problem/${fileID}`} style={{ textDecoration: "none" }}>
             문제보기
           </Link>
         </GoToProblemPage>
