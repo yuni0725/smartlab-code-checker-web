@@ -77,11 +77,39 @@ export const CodeEditorForCoding = () => {
   const [codeText, setCodeText] = useState("");
   const [loadingToSaveCode, setLoadingToSaveCode] = useState(false);
 
+  const getCurrentTime = () => {
+    const today = new Date();
+
+    const year = today.getFullYear();
+    const month = ("0" + (today.getMonth() + 1)).slice(-2);
+    const day = ("0" + today.getDate()).slice(-2);
+    const hours = ("0" + today.getHours()).slice(-2);
+    const minutes = ("0" + today.getMinutes()).slice(-2);
+    const seconds = ("0" + today.getSeconds()).slice(-2);
+
+    const timeString =
+      year +
+      "-" +
+      month +
+      "-" +
+      day +
+      " " +
+      hours +
+      "h:" +
+      minutes +
+      "m:" +
+      seconds +
+      "s";
+
+    return timeString;
+  };
+
   const onLangChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLang(e.target.value.toLowerCase());
   };
 
   const onEditerChange = (e: any) => {
+    console.log(e);
     setCodeText(e);
   };
 
@@ -97,6 +125,7 @@ export const CodeEditorForCoding = () => {
           doc(db, "codeUserSavedIt", `${user.displayName}`),
           {
             [fileAndLangName]: codeText,
+            currentTime: getCurrentTime(),
           },
           { merge: true }
         );

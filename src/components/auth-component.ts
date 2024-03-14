@@ -34,7 +34,7 @@ export const Input = styled.input`
   width: 100%;
   font-size: 16px;
 
-  background-color: whitesmoke;
+  background-color: white;
   color: var(--font-color);
 
   &:focus {
@@ -44,7 +44,8 @@ export const Input = styled.input`
   &[type="submit"] {
     cursor: pointer;
     outline: none;
-    background-color: #c1c1c1;
+    background-color: var(--highlight-color);
+    color: white;
     &:hover {
       opacity: 0.8;
     }
